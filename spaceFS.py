@@ -61,6 +61,7 @@ s = 63072000
 mf = (F * s) / isp
 
 print 'The mass fuel needed for ' + str(h1) + ' is equal to ' + str(mf)
+# h1 end
 
 # h2
 F = 0.5 * 0.00000000006 * math.pow(vcircular2*1000, 2) *2.2 * 1
@@ -72,8 +73,9 @@ s = 63072000
 mf = (F * s) / isp
 
 print 'The mass fuel needed for ' + str(h2) + ' is equal to ' + str(mf)
+# h2 end
 
-#h3
+# h3
 F = 0.5 * 0.00000000006 * math.pow(vcircular3*1000, 2) *2.2 * 1
 
 print 'Force for h1 - ' + str(F)
@@ -83,5 +85,87 @@ s = 63072000
 mf = (F * s) / isp
 
 print 'The mass fuel needed for ' + str(h3) + ' is equal to ' + str(mf)
+# h3 end
+
+# Calculate the magnitude of a vectors components in 3 space
+magnitude = lambda x, y, z : math.sqrt(math.pow(x,2) + math.pow(y, 2) + math.pow(z, 2))
+
+# Test case
+print 'The magnitude of a velovity vector with components x = 2, y = 4, z = 7 :\n'
+print str(magnitude(2,4,7))
+
+# Calculate the magnitude of a vectors components in 2 space
+magnitude = lambda x, y : math.sqrt(math.pow(x,2) + math.pow(y, 2))
+
+# Test case
+print 'The magnitude of a velovity vector with components x = 2, y = 4:\n'
+print str(magnitude(2,4))
+
+# Convert spherical (Geodedic) coordinates to rectangular
+# x = rcos(theta)cos(lambda)
+# r = radius of Earth + height above earth (elevation)
+elevation1 = 300
+r = rEarth + elevation1
+thet = 45
+lam = 120
+xrect = r * math.cos(thet) * math.cos(lam)
+print 'The rectangular x coordinate is : ' + str(xrect)
+
+yrect = r * math.cos(thet) * math.sin(lam)
+print 'The rectangular y coordinate is : ' + str(yrect)
+
+zrect = r * math.sin(thet)
+print 'The rectangular z coordinate is : ' + str(zrect)
+
+convertRectangular = lambda latitude, longitude, height : 
+	xrect = r * math.cos(thet) * math.cos(lam)
+	yrect = r * math.cos(thet) * math.sin(lam)
+	zrect = r * math.sin(thet)
+	print 'x = ' + str(xrect)
+	print 'y = ' + str(yrect)
+	print 'z = ' + str(zrect)
+
+# Test case for convertRectangular
+print 'Converting lat = 45 degrees'
+print 'longitude = 120 degrees'
+print 'Elevation = 300km'
+print 'Radius of Earth = 6378km'
+convertRectangular(thet,lam,elevation1)
+
+# Calculate ECEF coordinates from Geodedic 
+# Given
+# Lat = 28.5 degrees
+# long = -82.0 degrees
+# altitude above the elipsoid = 150 ft
+# Ellipticity (f) = 0.0033523
+# Earths equitorial radius in ft = 20925741.57ft
+latitude = 28.5
+longitude = -82.0
+height = 150
+ellipticity = 0.0033523
+eradiusft = 20925741.57
+
+xef = ((eradiusft/math.sqrt(math.pow(math.cos(latitude),2) + math.pow((1 - ellipticity), 2) * math.pow(math.sin(latitude), 2))) + height) * math.cos(latitude) * math.cos(longitude)
+print 'xECEF = ' + str(xef) + ' ft'
+print 'Expected xECEF = 2561350.138 ft'
+
+yef = ((eradiusft/math.sqrt(math.pow(math.cos(latitude),2) + math.pow((1 - ellipticity), 2) * math.pow(math.sin(latitude), 2))) + height) * math.cos(latitude) * math.sin(longitude)
+print 'yECEF = ' + str(yef) + ' ft'
+print 'Expected yECEF = -18224953.22 ft'
 
 
+zef = (((math.pow((1 - ellipticity), 2) * eradiusft)/math.sqrt(math.pow(math.cos(latitude),2) + math.pow((1 - ellipticity), 2) * math.pow(math.sin(latitude), 2))) + height) * math.sin(latitude)
+print 'zECEF = ' + str(zef) + ' ft'
+print 'Expected zECEF = 9925705.88 ft'
+
+convertECEF = lambda latitude, longitude, height, ellipticity, eradiusft :
+	xef = ((eradiusft/math.sqrt(math.pow(math.cos(latitude),2) + math.pow((1 - ellipticity), 2) * math.pow(math.sin(latitude), 2))) + height) * math.cos(latitude) * math.cos(longitude)
+	yef = ((eradiusft/math.sqrt(math.pow(math.cos(latitude),2) + math.pow((1 - ellipticity), 2) * math.pow(math.sin(latitude), 2))) + height) * math.cos(latitude) * math.sin(longitude)
+	zef = (((math.pow((1 - ellipticity), 2) * eradiusft)/math.sqrt(math.pow(math.cos(latitude),2) + math.pow((1 - ellipticity), 2) * math.pow(math.sin(latitude), 2))) + height) * math.sin(latitude)
+	print 'xECEF = ' + str(xef) + ' ft'
+	print 'yECEF = ' + str(yef) + ' ft'
+	print 'zECEF = ' + str(zef) + ' ft'
+
+# Test case for convertECEF
+print 'Testing converting to ECEF coordinates from Geodedic:'
+convertECEF(latitude, longitude, height, ellipticity, eradiusft)
