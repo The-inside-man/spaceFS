@@ -125,6 +125,12 @@ convertRectangular = lambda latitude, longitude, height :
 	print 'y = ' + str(yrect)
 	print 'z = ' + str(zrect)
 
+def geoToRect(latitude, longitude, height) :
+	xrect = r * math.cos(thet) * math.cos(lam)
+	yrect = r * math.cos(thet) * math.sin(lam)
+	zrect = r * math.sin(thet)
+	return [xrect, yrect, zrect]
+
 # Test case for convertRectangular
 print 'Converting lat = 45 degrees'
 print 'longitude = 120 degrees'
@@ -166,6 +172,24 @@ convertECEF = lambda latitude, longitude, height, ellipticity, eradiusft :
 	print 'yECEF = ' + str(yef) + ' ft'
 	print 'zECEF = ' + str(zef) + ' ft'
 
+def convertECEFfeet(latitude, longitude, height, ellipticity, eradiusft) :
+	xef = ((eradiusft/math.sqrt(math.pow(math.cos(latitude),2) + math.pow((1 - ellipticity), 2) * math.pow(math.sin(latitude), 2))) + height) * math.cos(latitude) * math.cos(longitude)
+	yef = ((eradiusft/math.sqrt(math.pow(math.cos(latitude),2) + math.pow((1 - ellipticity), 2) * math.pow(math.sin(latitude), 2))) + height) * math.cos(latitude) * math.sin(longitude)
+	zef = (((math.pow((1 - ellipticity), 2) * eradiusft)/math.sqrt(math.pow(math.cos(latitude),2) + math.pow((1 - ellipticity), 2) * math.pow(math.sin(latitude), 2))) + height) * math.sin(latitude)
+	return [xef, yef, zef]
+
 # Test case for convertECEF
 print 'Testing converting to ECEF coordinates from Geodedic:'
 convertECEF(latitude, longitude, height, ellipticity, eradiusft)
+
+#Linear Tangent Law
+
+def linearTangentLawDegrees(timeInterval, timeEnd, initThrustAngle) :
+	return math.degrees(math.atan((1 - (timeInterval/timeEnd)) * math.tan(math.radians(initThrustAngle))))
+
+def linearTangentLawRadians(timeInterval, timeEnd, initThrustAngle) :
+	return math.atan((1 - (timeInterval/timeEnd)) * math.tan(math.radians(initThrustAngle)))
+
+def linearTangentLawTan(timeInterval, timeEnd, initT hrustAngle) :
+	return (1 - (timeInterval/timeEnd)) * math.tan(math.radians(initThrustAngle))
+
