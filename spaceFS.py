@@ -193,3 +193,42 @@ def linearTangentLawRadians(timeInterval, timeEnd, initThrustAngle) :
 def linearTangentLawTan(timeInterval, timeEnd, initT hrustAngle) :
 	return (1 - (timeInterval/timeEnd)) * math.tan(math.radians(initThrustAngle))
 
+def peg(rnow, vnow, t, rd, tgo, rgrav, S, Q, vgo, magVgo) :
+    print('Generating PEG output...')
+    print('----------------------------------------------------------------------')
+    # a) Refernce thrust vector of LambdaV
+    lamv = np.divide(vgo, magVgo)
+    print('lamda V          = ', lamv)
+
+    # b) Compute the reference time tlambda
+    L = magVgo
+    J = L * tgo - S
+    tlam = J / L
+    print('t lambda         = ', tlam)
+
+    # c) Compute reference thrust turning rate lambda prime
+    rgo = np.subtract(np.subtract(np.subtract(rd, rnow) ,rgrav), np.multiply(vnow, tgo))
+
+    lamPrime = (np.subtract(rgo, np.multiply(S, lamv)))/(Q - (S*tlam))
+
+    print('Lambda prime     = ', lamPrime)
+
+    # d) Calculate the linear Tangent thrust vector and the unit vector
+    lamf = np.add(lamv, np.multiply(lamPrime, (t - (tlam + t))))
+    uf = np.divide(lamf, (np.sqrt((lamf[0] * lamf[0]) + (lamf[1] * lamf[1]) + (lamf[2] * lamf[2]))))
+    print('Lambda f         = ', lamf)
+    print('u sub f          = ', uf)
+
+    # e) To Do - Question 26
+
+    # f) vmeco, flight path anlge calculation
+    a = (r1+r2)/2
+    vmeco = math.sqrt(mu *((2/rmeco) - (1/a)))
+    vp = math.sqrt(mu * ((2/r1) - (1/a)))
+    magh = np.dot(r1, vp)
+    gamma = math.degrees(math.acos(magh/(np.dot(vmeco, rmeco))))
+    print('Velocity at MECO = ', vmeco)
+    print('Gamma            = ', gamma)
+    
+    print('----------------------------------------------------------------------')
+
