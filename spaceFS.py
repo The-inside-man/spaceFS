@@ -41,7 +41,7 @@ B = [[9,8,7],[6,5,4],[3,2,1]]
 # dot product of matrices
 dotProduct = lambda a, b : np.dot(a,b)
 
-# dot product of matrices
+# cross product of matrices
 crossProduct = lambda a, b : np.cross(a,b)
 
 # Test case for dot product
@@ -172,6 +172,8 @@ convertECEF = lambda latitude, longitude, height, ellipticity, eradiusft :
 	print 'yECEF = ' + str(yef) + ' ft'
 	print 'zECEF = ' + str(zef) + ' ft'
 
+
+# CONVERT TO RADIANS, DO NOT USE DEGREES
 def convertECEFfeet(latitude, longitude, height, ellipticity, eradiusft) :
 	xef = ((eradiusft/math.sqrt(math.pow(math.cos(latitude),2) + math.pow((1 - ellipticity), 2) * math.pow(math.sin(latitude), 2))) + height) * math.cos(latitude) * math.cos(longitude)
 	yef = ((eradiusft/math.sqrt(math.pow(math.cos(latitude),2) + math.pow((1 - ellipticity), 2) * math.pow(math.sin(latitude), 2))) + height) * math.cos(latitude) * math.sin(longitude)
